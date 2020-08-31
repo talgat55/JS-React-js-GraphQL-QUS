@@ -2,7 +2,7 @@ import React, {createContext, useReducer} from 'react';
 
 const AuthContext = createContext({
     user: null,
-    login: data => {},
+    login: userData => {},
     logout: () =>{}
 });
 
@@ -42,6 +42,7 @@ const AuthProvider = props =>{
     return (
         <AuthContext.Provider
             value={{user: state.user, login, logout}}
+            {...props}
         />
     )
 
