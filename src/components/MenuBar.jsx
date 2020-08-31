@@ -29,7 +29,7 @@ const MenuBar = () => {
                             name="logout"
                             onClick={logout}
                             as={Link}
-                            to="/logout"
+                            to="/"
                         />
                     </Menu.Menu>
 

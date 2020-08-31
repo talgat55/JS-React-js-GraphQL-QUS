@@ -4,14 +4,27 @@ import jwtDecode from 'jwt-decode';
 const initialState = {
     user: null
 };
-if (localStorage.getItem('jwtToken')) {
-    const decodedToken = jwtDecode(localStorage.getItem('jwtToken'));
 
-    if (decodedToken.exp * 1000 < Date.now()) {
-        localStorage.removeItem('jwtToken');
-    } else {
-        initialState.user = decodedToken;
+if (localStorage.getItem('jwtToken' ) ) {
+    const jwtToken =localStorage.getItem('jwtToken');
+    if(jwtToken !== "undefined"){
+
+
+        try {
+            const decodedToken = jwtDecode(jwtToken);
+            if (decodedToken.exp * 1000 < Date.now()) {
+                localStorage.removeItem('jwtToken');
+            } else {
+                initialState.user = decodedToken;
+            }
+            // valid token format
+        } catch(error) {
+            localStorage.removeItem('jwtToken');
+        }
+
     }
+
+
 }
 
 const AuthContext = createContext({
@@ -45,7 +58,7 @@ const AuthProvider = props => {
     const [state, dispatch] = useReducer(authReducer, initialState);
 
     const login = userData => {
-        localStorage.setItem('jwtToken', userData);
+        localStorage.setItem('jwtToken', userData.token);
         dispatch({
             type: 'LOGIN',
             payload: userData
@@ -55,7 +68,7 @@ const AuthProvider = props => {
         localStorage.removeItem('jwtToken');
         dispatch({
             type: 'LOGOUT',
-        })
+        });
     }
     return (
         <AuthContext.Provider
